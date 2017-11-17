@@ -24,7 +24,22 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 	//   x, y, theta and their uncertainties from GPS) and all weights to 1. 
 	// Add random Gaussian noise to each particle.
 	// NOTE: Consult particle_filter.h for more information about this method (and others in this file).
-
+	num_particles=100;
+	std::default_random_engine gen;
+	normal_distribution<double> dist_x(x, std[0]);
+	normal_distribution<double> dist_y(y, std[1]);
+	normal_distribution<double> dist_theta(theta, std[2]);
+	for (int i=0; i < num_particles; i++) {
+		Particle particle;
+		particle.id = i;
+		particle.x = dist_x(gen);
+		particle.y = dist_y(gen);
+		particle.theta = dist_theta(gen);
+		particle.weight = 1;
+		particles.push_back(particle);
+		weights.push_back(1);
+	}
+	is_initialized = true;
 }
 
 void ParticleFilter::prediction(double delta_t, double std_pos[], double velocity, double yaw_rate) {
@@ -32,6 +47,32 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 	// NOTE: When adding noise you may find std::normal_distribution and std::default_random_engine useful.
 	//  http://en.cppreference.com/w/cpp/numeric/random/normal_distribution
 	//  http://www.cplusplus.com/reference/random/default_random_engine/
+	std::normal_distribution norm;
+	std::default_random_engine gen;
+	double new_x;
+	double new_y;
+	double new_theta;
+
+	for (int i=; i < num_particles; i++) {
+		Particle particle = particles[i];
+		if (yaw_rate == 0) {
+			new_x = particle.x + velocity * delta_t * cos(particle.theta);
+			new_y = particle.y + velocity * delta_t * sin(particle.theta);
+			new_theta = particle.theta;
+		} else {
+			new_x = particle.x + velocity/yaw_rate*(sin(particle.theta + yaw_rate * delta_t) - sin(particle.theta));
+			new_y = particle.y + velocity/yaw_rate*(cos(particle.theta) - cos(particle.theta + yaw_rate * delta_t));
+			new_theta = particle.theta + yaw_rate * delta_t;
+		}
+		normal_distribution<double> dist_x(new_x, std[0]);
+		normal_distribution<double> dist_y(new_y, std[1]);
+		normal_distribution<double> dist_theta(new_theta, std[2]);
+		particle.x=dist_x(gen);
+		particle.y=dist_y(gen);
+		particle.theta=dist_theta(gen);
+		
+	}
+
 
 }
 
