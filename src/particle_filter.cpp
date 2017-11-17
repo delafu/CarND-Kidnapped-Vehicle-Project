@@ -96,6 +96,8 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	//   and the following is a good resource for the actual equation to implement (look at equation 
 	//   3.33
 	//   http://planning.cs.uiuc.edu/node99.html
+
+	
 }
 
 void ParticleFilter::resample() {
@@ -111,7 +113,6 @@ Particle ParticleFilter::SetAssociations(Particle particle, std::vector<int> ass
 	// associations: The landmark id that goes along with each listed association
 	// sense_x: the associations x mapping already converted to world coordinates
 	// sense_y: the associations y mapping already converted to world coordinates
-
 	//Clear the previous associations
 	particle.associations.clear();
 	particle.sense_x.clear();
@@ -120,7 +121,7 @@ Particle ParticleFilter::SetAssociations(Particle particle, std::vector<int> ass
 	particle.associations= associations;
  	particle.sense_x = sense_x;
  	particle.sense_y = sense_y;
-
+	
  	return particle;
 }
 
