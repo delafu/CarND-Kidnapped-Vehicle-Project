@@ -97,6 +97,25 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	//   3.33
 	//   http://planning.cs.uiuc.edu/node99.html
 
+
+
+
+	for (int i = 0; i < num_particles; i++) {
+		vector<LandmarkObs> trans_observations;
+		LandmarkObs obs;
+		Particle particle = particles[i];
+		for (int j = 0; j < observations.size(); j++) {
+			LandmarkObs trans_obs;
+			obs = observations[j];
+			trans_obs.x = particle.x + (cos(particle.theta) * obs.x) - (sin(particle.theta) * obs.y);
+			trans_obs.y = particle.y + (sin(particle.theta) * obs.x) + (cos(particle.theta) * obs.y);
+			 
+		}
+
+	}
+	
+
+
 	
 }
 

@@ -62,6 +62,7 @@
             "intelliSenseMode": "msvc-x64",
             "browse": {
                 "path": [
+                    "${workspaceRoot}",
                     "C:/MinGW/lib/gcc/mingw32/6.3.0/include",
                     "C:/MinGW/lib/gcc/mingw32/6.3.0/include-fixed",
                     "C:/MinGW/include/*"
