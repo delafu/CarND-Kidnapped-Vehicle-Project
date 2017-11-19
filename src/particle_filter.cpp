@@ -81,6 +81,18 @@ void ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted, std::ve
 	//   observed measurement to this particular landmark.
 	// NOTE: this method will NOT be called by the grading code. But you will probably find it useful to 
 	//   implement this method and use it as a helper during the updateWeights phase.
+	for (int i = 0; i < observations.size(); i++) {
+		int best_id = -1;
+		double best_dist = numeric_limits<double>::max();
+		for (int j = 0; j < predicted.size(); j++) {
+			double distance = dist(observations[i].x, observations[i].x, predicted[j].y, pedicted[j].y);
+			if (distance < best_dist) {
+				best_id = predicted[j].id;
+				best_dist = distance;
+			}
+		}
+		observations.id = best_id;
+	}
 
 }
 
@@ -108,9 +120,25 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 			LandmarkObs trans_obs;
 			obs = observations[j];
 			trans_obs.x = particle.x + (cos(particle.theta) * obs.x) - (sin(particle.theta) * obs.y);
-			trans_obs.y = particle.y + (sin(particle.theta) * obs.x) + (cos(particle.theta) * obs.y);
-			 
+			trans_obs.y = particle.y + (sin(particle.theta) * obs.x) + (cos(particle.theta) * obs.y); 
+			trans_observations.push_back(trans_obs);
 		}
+		std::vector<single_landmark_s> landmarks = map_landmarks.landmark_list;
+		std::vector<LandmarkObs> filtered;
+		for (int j=0; j < landmarks.size(); j++) {
+			int map_id=landmarks[i].id_i;
+			float map_x=landmarks[i].x_f;
+			float map_y=landmarks[i].y_f;
+			float dist=dist(map_x, map_y, particle.x, particle.y);
+			if (dist < sensor_range) {
+				LandmarkObs obs_range;
+				obs_range.id = map_id;
+				obs_range.x = map_x;
+				obs_range.y = map_y;
+				filtered.push_back(obs_range);
+			}
+		}
+		dataAssociation(filtered, trans_observations);
 
 	}
 	

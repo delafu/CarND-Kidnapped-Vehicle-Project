@@ -4,6 +4,8 @@
     "C_Cpp.intelliSenseEngineFallback": "Disabled",
     "files.associations": {
         "*.tcc": "cpp",
-        "system_error": "cpp"
+        "system_error": "cpp",
+        "initializer_list": "cpp",
+        "utility": "cpp"
     }
 }
