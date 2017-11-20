@@ -150,26 +150,34 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		dataAssociation(filtered, trans_observations);
 
 		// Calculate the new weights for the particle
-
+		particles[i].weight = 1;
 		// For each observation
-
+		double sig_x=std_landmark[0];
+		double sig_y=std_landmark[1];
 		for (int j=0; j < trans_observations.size(); j++) {
 			// Get the landmark associated
 			LandmarkObs observ=trans_observations[j];
-			double x,y;
+			double x = observ.x;
+			double y = observ.y;
 			double ux, uy;
 			for (int k=0; k < filtered.size(); k++) {
 				LandmarkObs pos_land=filtered[k];
 				if (observ.id == pos_land.id) {
 					ux = pos_land.x;
 					uy = pos_land.y;
+					break;
 				}
 			}
 
+			// Calculate partial weight
+
+			double gauss_norm = (1/(2* M_PI * sig_x * sig_y));
+			double exponent1 = ((x - ux) * (x - ux)) / (2 * sig_x * sig_x);
+			double exponent2 = ((y - uy) * (y - uy)) / (2 * sig_y * sig_y);
+			double exponent = exponent1 + exponent2;
+			double total = gauss_norm * exp(-exponent);
+			particles[i].weight = particles[i].weight * total;
 		}
-
-
-
 	}
 	
 
