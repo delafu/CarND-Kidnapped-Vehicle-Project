@@ -113,6 +113,9 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 
 
 	for (int i = 0; i < num_particles; i++) {
+
+		// Get the observations coordinates in the map system
+
 		vector<LandmarkObs> trans_observations;
 		LandmarkObs obs;
 		Particle particle = particles[i];
@@ -123,12 +126,15 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 			trans_obs.y = particle.y + (sin(particle.theta) * obs.x) + (cos(particle.theta) * obs.y); 
 			trans_observations.push_back(trans_obs);
 		}
+
+		// Get the landmarks in the sensor range for the particle
+
 		std::vector<single_landmark_s> landmarks = map_landmarks.landmark_list;
 		std::vector<LandmarkObs> filtered;
 		for (int j=0; j < landmarks.size(); j++) {
-			int map_id=landmarks[i].id_i;
-			float map_x=landmarks[i].x_f;
-			float map_y=landmarks[i].y_f;
+			int map_id=landmarks[j].id_i;
+			float map_x=landmarks[j].x_f;
+			float map_y=landmarks[j].y_f;
 			float dist=dist(map_x, map_y, particle.x, particle.y);
 			if (dist < sensor_range) {
 				LandmarkObs obs_range;
@@ -138,7 +144,31 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 				filtered.push_back(obs_range);
 			}
 		}
+
+		// Get the associations for the observations
+
 		dataAssociation(filtered, trans_observations);
+
+		// Calculate the new weights for the particle
+
+		// For each observation
+
+		for (int j=0; j < trans_observations.size(); j++) {
+			// Get the landmark associated
+			LandmarkObs observ=trans_observations[j];
+			double x,y;
+			double ux, uy;
+			for (int k=0; k < filtered.size(); k++) {
+				LandmarkObs pos_land=filtered[k];
+				if (observ.id == pos_land.id) {
+					ux = pos_land.x;
+					uy = pos_land.y;
+				}
+			}
+
+		}
+
+
 
 	}
 	
