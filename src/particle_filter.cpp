@@ -174,6 +174,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 			particles[i].weight = particles[i].weight * total;
 		}
 		weights.push_back(particles[i].weight);
+		cout << "Weight: " << particles[i].weight << "\n";
 	}
 	
 
