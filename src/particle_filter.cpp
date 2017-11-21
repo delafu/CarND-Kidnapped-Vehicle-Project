@@ -41,7 +41,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 		cout << "Init x: ";
 		cout << particle.x;
 		cout << "\n";
-		cout << "Init y: "
+		cout << "Init y: ";
 		cout << particle.y;
 		cout << "\n";
 		
@@ -80,7 +80,7 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 		cout << "Pred x: ";
 		cout << particle.x;
 		cout << "\n";
-		cout << "Pred y: "
+		cout << "Pred y: ";
 		cout << particle.y;
 		cout << "\n";		
 	}
