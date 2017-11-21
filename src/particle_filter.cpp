@@ -171,6 +171,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 			double exponent2 = ((y - uy) * (y - uy)) / (2 * sig_y * sig_y);
 			double exponent = exponent1 + exponent2;
 			double total = gauss_norm * exp(-exponent);
+			cout << "Weight Bef: " << particles[i].weight * total << "\n";
 			particles[i].weight = particles[i].weight * total;
 		}
 		weights.push_back(particles[i].weight);
