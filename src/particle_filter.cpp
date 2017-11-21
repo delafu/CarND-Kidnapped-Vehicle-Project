@@ -131,8 +131,8 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 			int map_id=map_landmarks.landmark_list[j].id_i;
 			float map_x=map_landmarks.landmark_list[j].x_f;
 			float map_y=map_landmarks.landmark_list[j].y_f;
-			float dist=dist(map_x, map_y, particle.x, particle.y);
-			if (dist < sensor_range) {
+			float distance=dist(map_x, map_y, particle.x, particle.y);
+			if (distance < sensor_range) {
 				LandmarkObs obs_range;
 				obs_range.id = map_id;
 				obs_range.x = map_x;
@@ -189,6 +189,7 @@ void ParticleFilter::resample() {
 	vector<Particle> particles_resampled;
 	double beta = 0;
 	uniform_int_distribution<int> uniintdist(0, num_particles-1);
+	std::default_random_engine gen;
 	int index = uniintdist(gen);
 	double max_weight=*max_element(weights.begin(), weights.end());
 	uniform_real_distribution<double> unirealdist(0.0, 2*max_weight);
