@@ -195,7 +195,14 @@ void ParticleFilter::resample() {
 	uniform_real_distribution<double> unirealdist(0.0, 2*max_weight);
 	for (int i=0; i < num_particles; i++) {
 		beta = beta + unirealdist(gen);
+		while (weights[index] < beta) {
+			beta = beta - weights[index];
+			index = index + 1;
+			index = index % num_particles;
+		}
+		particles_resampled.push_back(particles[index]);
 	}
+	particles = particles_resampled;
 }
 
 Particle ParticleFilter::SetAssociations(Particle particle, std::vector<int> associations, std::vector<double> sense_x, std::vector<double> sense_y)
