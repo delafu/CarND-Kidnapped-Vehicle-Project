@@ -108,10 +108,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 	//   and the following is a good resource for the actual equation to implement (look at equation 
 	//   3.33
 	//   http://planning.cs.uiuc.edu/node99.html
-
-
-
-
+	weights.clear();
 	for (int i = 0; i < num_particles; i++) {
 
 		// Get the observations coordinates in the map system
@@ -178,6 +175,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 			double total = gauss_norm * exp(-exponent);
 			particles[i].weight = particles[i].weight * total;
 		}
+		weights.push_back(particles[i].weight);
 	}
 	
 
@@ -189,7 +187,15 @@ void ParticleFilter::resample() {
 	// TODO: Resample particles with replacement with probability proportional to their weight. 
 	// NOTE: You may find std::discrete_distribution helpful here.
 	//   http://en.cppreference.com/w/cpp/numeric/random/discrete_distribution
-
+	vector<Particle> particles_resampled;
+	double beta = 0;
+	uniform_int_distribution<int> uniintdist(0, num_particles-1);
+	int index = uniintdist(gen);
+	double max_weight=*max_element(weights.begin(), weights.end());
+	uniform_real_distribution<double> unirealdist(0.0, 2*max_weight);
+	for (int i=0; i < num_particles; i++) {
+		beta = beta + unirealdist(gen);
+	}
 }
 
 Particle ParticleFilter::SetAssociations(Particle particle, std::vector<int> associations, std::vector<double> sense_x, std::vector<double> sense_y)
