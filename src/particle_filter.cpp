@@ -40,6 +40,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 		weights.push_back(1);
 	}
 	is_initialized = true;
+	cout << particles;
 }
 
 void ParticleFilter::prediction(double delta_t, double std_pos[], double velocity, double yaw_rate) {
