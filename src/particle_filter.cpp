@@ -47,13 +47,13 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 	// NOTE: When adding noise you may find std::normal_distribution and std::default_random_engine useful.
 	//  http://en.cppreference.com/w/cpp/numeric/random/normal_distribution
 	//  http://www.cplusplus.com/reference/random/default_random_engine/
-	std::normal_distribution norm;
+	std::normal_distribution<double> norm;
 	std::default_random_engine gen;
 	double new_x;
 	double new_y;
 	double new_theta;
 
-	for (int i=; i < num_particles; i++) {
+	for (int i=0; i < num_particles; i++) {
 		Particle particle = particles[i];
 		if (yaw_rate == 0) {
 			new_x = particle.x + velocity * delta_t * cos(particle.theta);
@@ -64,9 +64,9 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 			new_y = particle.y + velocity/yaw_rate*(cos(particle.theta) - cos(particle.theta + yaw_rate * delta_t));
 			new_theta = particle.theta + yaw_rate * delta_t;
 		}
-		normal_distribution<double> dist_x(new_x, std[0]);
-		normal_distribution<double> dist_y(new_y, std[1]);
-		normal_distribution<double> dist_theta(new_theta, std[2]);
+		normal_distribution<double> dist_x(new_x, std_pos[0]);
+		normal_distribution<double> dist_y(new_y, std_pos[1]);
+		normal_distribution<double> dist_theta(new_theta, std_pos[2]);
 		particle.x=dist_x(gen);
 		particle.y=dist_y(gen);
 		particle.theta=dist_theta(gen);
@@ -85,13 +85,13 @@ void ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted, std::ve
 		int best_id = -1;
 		double best_dist = numeric_limits<double>::max();
 		for (int j = 0; j < predicted.size(); j++) {
-			double distance = dist(observations[i].x, observations[i].x, predicted[j].y, pedicted[j].y);
+			double distance = dist(observations[i].x, observations[i].x, predicted[j].y, predicted[j].y);
 			if (distance < best_dist) {
 				best_id = predicted[j].id;
 				best_dist = distance;
 			}
 		}
-		observations.id = best_id;
+		observations[i].id = best_id;
 	}
 
 }
@@ -126,7 +126,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 
 		// Get the landmarks in the sensor range for the particle
 
-		std::vector<single_landmark_s> landmarks = map_landmarks.landmark_list;
+		std::vector<Map.single_landmark_s> landmarks = map_landmarks.landmark_list;
 		std::vector<LandmarkObs> filtered;
 		for (int j=0; j < landmarks.size(); j++) {
 			int map_id=landmarks[j].id_i;
