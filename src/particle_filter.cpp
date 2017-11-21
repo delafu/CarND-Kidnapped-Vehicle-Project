@@ -38,13 +38,6 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 		particle.weight = 1;
 		particles.push_back(particle);
 		weights.push_back(1);
-		cout << "Init x: ";
-		cout << particle.x;
-		cout << "\n";
-		cout << "Init y: ";
-		cout << particle.y;
-		cout << "\n";
-		
 	}
 	is_initialized = true;
 }
@@ -76,13 +69,7 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 		normal_distribution<double> dist_theta(new_theta, std_pos[2]);
 		particle.x=dist_x(gen);
 		particle.y=dist_y(gen);
-		particle.theta=dist_theta(gen);
-		cout << "Pred x: ";
-		cout << particle.x;
-		cout << "\n";
-		cout << "Pred y: ";
-		cout << particle.y;
-		cout << "\n";		
+		particle.theta=dist_theta(gen);		
 	}
 
 
@@ -101,6 +88,9 @@ void ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted, std::ve
 			if (distance < best_dist) {
 				best_id = predicted[j].id;
 				best_dist = distance;
+				cout << "Best dist: ";
+				cout << best_dist;
+				cout << "\n";
 			}
 		}
 		observations[i].id = best_id;
