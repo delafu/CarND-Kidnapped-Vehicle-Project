@@ -92,8 +92,6 @@ void ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted, std::ve
 		}
 		observations[i].id = best_id;
 	}
-  }
-
 }
 
 void ParticleFilter::updateWeights(double sensor_range, double std_landmark[], 
