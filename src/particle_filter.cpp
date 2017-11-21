@@ -80,18 +80,34 @@ void ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted, std::ve
 	//   observed measurement to this particular landmark.
 	// NOTE: this method will NOT be called by the grading code. But you will probably find it useful to 
 	//   implement this method and use it as a helper during the updateWeights phase.
-	for (int i = 0; i < observations.size(); i++) {
-		int best_id = -1;
-		double best_dist = numeric_limits<double>::max();
-		for (int j = 0; j < predicted.size(); j++) {
-			double distance = dist(observations[i].x, observations[i].x, predicted[j].y, predicted[j].y);
-			if (distance < best_dist) {
-				best_id = predicted[j].id;
-				best_dist = distance;
-			}
-		}
-		observations[i].id = best_id;
-	}
+  for (unsigned int i = 0; i < observations.size(); i++) {
+    
+    // grab current observation
+    LandmarkObs o = observations[i];
+
+    // init minimum distance to maximum possible
+    double min_dist = numeric_limits<double>::max();
+
+    // init id of landmark from map placeholder to be associated with the observation
+    int map_id = -1;
+    
+    for (unsigned int j = 0; j < predicted.size(); j++) {
+      // grab current prediction
+      LandmarkObs p = predicted[j];
+      
+      // get distance between current/predicted landmarks
+      double cur_dist = dist(o.x, o.y, p.x, p.y);
+
+      // find the predicted landmark nearest the current observed landmark
+      if (cur_dist < min_dist) {
+        min_dist = cur_dist;
+        map_id = p.id;
+      }
+    }
+
+    // set the observation's id to the nearest predicted landmark's id
+    observations[i].id = map_id;
+  }
 
 }
 
