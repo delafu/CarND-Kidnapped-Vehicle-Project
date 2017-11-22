@@ -52,7 +52,6 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 	//  http://en.cppreference.com/w/cpp/numeric/random/normal_distribution
 	//  http://www.cplusplus.com/reference/random/default_random_engine/
 
-	std::default_random_engine gen;
   normal_distribution<double> N_x(0, std_pos[0]);
   normal_distribution<double> N_y(0, std_pos[1]);
   normal_distribution<double> N_theta(0, std_pos[2]);
