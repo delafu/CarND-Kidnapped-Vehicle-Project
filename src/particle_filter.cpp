@@ -53,10 +53,13 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 	//  http://www.cplusplus.com/reference/random/default_random_engine/
 
 	std::default_random_engine gen;
-	double new_x;
-	double new_y;
-	double new_theta;
-	for (int i=0; i < num_particles; i++) {
+  normal_distribution<double> N_x(0, std_pos[0]);
+  normal_distribution<double> N_y(0, std_pos[1]);
+  normal_distribution<double> N_theta(0, std_pos[2]);
+
+  for (int i = 0; i < num_particles; i++) {
+
+    // calculate new state
     if (fabs(yaw_rate) < 0.00001) {  
       particles[i].x += velocity * delta_t * cos(particles[i].theta);
       particles[i].y += velocity * delta_t * sin(particles[i].theta);
@@ -66,13 +69,12 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
       particles[i].y += velocity / yaw_rate * (cos(particles[i].theta) - cos(particles[i].theta + yaw_rate*delta_t));
       particles[i].theta += yaw_rate * delta_t;
     }
-		normal_distribution<double> dist_x(particles[i].x, std_pos[0]);
-		normal_distribution<double> dist_y(particles[i].y, std_pos[1]);
-		normal_distribution<double> dist_theta(particles[i].theta, std_pos[2]);
-		particles[i].x=dist_x(gen);
-		particles[i].y=dist_y(gen);
-		particles[i].theta=dist_theta(gen);		
-	}
+
+    // add noise
+    particles[i].x += N_x(gen);
+    particles[i].y += N_y(gen);
+    particles[i].theta += N_theta(gen);
+  }
 
 
 }
