@@ -35,7 +35,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 		particle.x = dist_x(gen);
 		particle.y = dist_y(gen);
 		particle.theta = dist_theta(gen);
-		particle.weight = 1;
+		particle.weight = 1.0;
 		particles.push_back(particle);
 		weights.push_back(1);
 	}
@@ -55,7 +55,7 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 
 	for (int i=0; i < num_particles; i++) {
 		Particle particle = particles[i];
-		if (yaw_rate == 0) {
+		if (fabs(yaw_rate) < 0.00001) {
 			new_x = particle.x + velocity * delta_t * cos(particle.theta);
 			new_y = particle.y + velocity * delta_t * sin(particle.theta);
 			new_theta = particle.theta;
@@ -117,6 +117,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		for (int j = 0; j < observations.size(); j++) {
 			LandmarkObs trans_obs;
 			obs = observations[j];
+			// Aqui puede estar la clave falta el id. No lo creo, pero bueno...
 			trans_obs.x = particle.x + (cos(particle.theta) * obs.x) - (sin(particle.theta) * obs.y);
 			trans_obs.y = particle.y + (sin(particle.theta) * obs.x) + (cos(particle.theta) * obs.y); 
 			trans_observations.push_back(trans_obs);
