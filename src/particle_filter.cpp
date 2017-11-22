@@ -208,7 +208,7 @@ void ParticleFilter::resample() {
 	// TODO: Resample particles with replacement with probability proportional to their weight. 
 	// NOTE: You may find std::discrete_distribution helpful here.
 	//   http://en.cppreference.com/w/cpp/numeric/random/discrete_distribution
-	weights.clear;
+	weights.clear();
 	vector<Particle> particles_resampled;
 	double beta = 0;
 	uniform_int_distribution<int> uniintdist(0, num_particles-1);
