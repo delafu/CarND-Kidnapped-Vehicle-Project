@@ -145,7 +145,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		dataAssociation(filtered, trans_observations);
 
 		// Calculate the new weights for the particle
-		particles[i].weight = 1;
+		particles[i].weight = 1.0;
 		// For each observation
 		double sig_x=std_landmark[0];
 		double sig_y=std_landmark[1];
@@ -158,9 +158,9 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 			for (int k=0; k < filtered.size(); k++) {
 				LandmarkObs pos_land=filtered[k];
 				if (observ.id == pos_land.id) {
+					cout << "Id: " << observ.id;
 					ux = pos_land.x;
 					uy = pos_land.y;
-					break;
 				}
 			}
 
@@ -171,12 +171,9 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 			double exponent2 = ((y - uy) * (y - uy)) / (2 * sig_y * sig_y);
 			double exponent = exponent1 + exponent2;
 			double total = gauss_norm * exp(-exponent);
-			cout << "Weight Part: " << particles[i].weight << "\n";
-			cout << "Total Part: " << total << "\n";
 			particles[i].weight = particles[i].weight * total;
 		}
 		weights.push_back(particles[i].weight);
-		cout << "Weight: " << particles[i].weight << "\n";
 	}
 
 
