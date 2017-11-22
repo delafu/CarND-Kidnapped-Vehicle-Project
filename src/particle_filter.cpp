@@ -29,7 +29,6 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
  num_particles = 101;
 
   // define normal distributions for sensor noise
-	std::default_random_engine gen;
 	normal_distribution<double> dist_x(x, std[0]);
 	normal_distribution<double> dist_y(y, std[1]);
 	normal_distribution<double> dist_theta(theta, std[2]);
@@ -204,7 +203,6 @@ void ParticleFilter::resample() {
 	vector<Particle> particles_resampled;
 	double beta = 0;
 	uniform_int_distribution<int> uniintdist(0, num_particles-1);
-	std::default_random_engine gen;
 	int index = uniintdist(gen);
 	double max_weight=*max_element(weights.begin(), weights.end());
 	cout << "Max weight: " << max_weight << "\n";
