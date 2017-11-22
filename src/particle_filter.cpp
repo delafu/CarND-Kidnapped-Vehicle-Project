@@ -29,28 +29,21 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
  num_particles = 101;
 
   // define normal distributions for sensor noise
-  normal_distribution<double> N_x_init(0, std[0]);
-  normal_distribution<double> N_y_init(0, std[1]);
-  normal_distribution<double> N_theta_init(0, std[2]);
-
-  // init particles
-  for (int i = 0; i < num_particles; i++) {
-    Particle p;
-    p.id = i;
-    p.x = x;
-    p.y = y;
-    p.theta = theta;
-    p.weight = 1.0;
-
-    // add noise
-    p.x += N_x_init(gen);
-    p.y += N_y_init(gen);
-    p.theta += N_theta_init(gen);
-
-    particles.push_back(p);
-  }
-
-  is_initialized = true;
+	std::default_random_engine gen;
+	normal_distribution<double> dist_x(x, std[0]);
+	normal_distribution<double> dist_y(y, std[1]);
+	normal_distribution<double> dist_theta(theta, std[2]);
+	for (int i=0; i < num_particles; i++) {
+		Particle particle;
+		particle.id = i;
+		particle.x = dist_x(gen);
+		particle.y = dist_y(gen);
+		particle.theta = dist_theta(gen);
+		particle.weight = 1.0;
+		particles.push_back(particle);
+		weights.push_back(1);
+	}
+	is_initialized = true;
 }
 
 void ParticleFilter::prediction(double delta_t, double std_pos[], double velocity, double yaw_rate) {
