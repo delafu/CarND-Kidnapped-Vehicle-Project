@@ -58,7 +58,7 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 	// NOTE: When adding noise you may find std::normal_distribution and std::default_random_engine useful.
 	//  http://en.cppreference.com/w/cpp/numeric/random/normal_distribution
 	//  http://www.cplusplus.com/reference/random/default_random_engine/
-	std::normal_distribution<double> norm;
+ 	std::normal_distribution<double> norm;
 	std::default_random_engine gen;
 	double new_x;
 	double new_y;
@@ -82,7 +82,6 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 		particle.y=dist_y(gen);
 		particle.theta=dist_theta(gen);		
 	}
-  }
 
 
 }
@@ -209,7 +208,7 @@ void ParticleFilter::resample() {
 	// TODO: Resample particles with replacement with probability proportional to their weight. 
 	// NOTE: You may find std::discrete_distribution helpful here.
 	//   http://en.cppreference.com/w/cpp/numeric/random/discrete_distribution
-	weights.clear();
+	weights.clear;
 	vector<Particle> particles_resampled;
 	double beta = 0;
 	uniform_int_distribution<int> uniintdist(0, num_particles-1);
